@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "972068939239",
+    "project_id": "reactapp-2df3a",
+    "storage_bucket": "reactapp-2df3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972068939239:android:a4e14fa0415a42875f4942",
+        "android_client_info": {
+          "package_name": "com.crudapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972068939239-5rdv6gga4t7nemu2c3ep8kvfbaruh8a5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.crudapp",
+            "certificate_hash": "b087087c621a4cdb26a783b72e083fd695de2fdb"
+          }
+        },
+        {
+          "client_id": "972068939239-82oo4a041ldg4q4c4l13atrt8r21060b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB54dCuvbSgy7TgalLhO6WzivFw8QkE8V0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972068939239-82oo4a041ldg4q4c4l13atrt8r21060b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

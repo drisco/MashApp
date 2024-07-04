@@ -1,118 +1,108 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import 'react-native-gesture-handler';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './ecrans/HomeScreen';
+import SettingsScreen from './ecrans/SettingsScreen';
+import UserListScreen from './ecrans/UserListScreen';
+import WebPageScreen from './ecrans/WebPageScreen';
+import HistoryScreen from './ecrans/HistoryScreen';
+import AddScreen from './ecrans/AddScreen';
+import LoginScreen from './ecrans/Login';
+import RegisterScreen from './ecrans/Register';
+import { UserProvider, UserContext } from './ecrans/config/StateContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function HomeStack() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <Stack.Navigator>
+      <Stack.Screen name="HomePage" component={HomeScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Liste des utilisateurs" component={UserListScreen} />
+      <Stack.Screen 
+        name="WebPage" 
+        component={WebPageScreen}
+        options={{
+          headerTitleAlign: 'center',
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', marginRight: 20 }}>
+              <TouchableOpacity>
+                <Ionicons name="fitness" size={25} color="black" />
+              </TouchableOpacity>
+              <View style={{ marginLeft: 10 }}>
+                <TouchableOpacity>
+                  <Ionicons name="gift-outline" size={25} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          ),
+        }}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <Stack.Screen name="Historique" component={HistoryScreen} />
+      <Stack.Screen name="Ajouter" component={AddScreen} />
+    </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const userData = await AsyncStorage.getItem('userData');
+      if (userData) {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkUserSession();
+  }, []);
+
+  return (
+  <UserProvider>
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              let iconName = '';
+
+              if (route.name === 'Home') {
+                iconName = 'home-outline';
+              } else if (route.name === 'Settings') {
+                iconName = 'settings-outline';
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+          })}
+        >
+          <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }}/>
+          <Tab.Screen name="Settings" options={{ headerShown: false }}>
+              {props => <SettingsScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Tab.Screen>
+        </Tab.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {props => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+          </Stack.Screen>
+          <Stack.Screen name="Register" options={{ headerShown: false }}>
+            {props => <RegisterScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  </UserProvider>
+  );
+}
 
 export default App;
