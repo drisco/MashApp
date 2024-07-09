@@ -24,7 +24,7 @@ function HomeStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="HomePage" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Liste des utilisateurs" component={UserListScreen} />
+      <Stack.Screen name="Liste des utilisateurs" component={UserListScreen} options={{headerShown:false}}/>
       <Stack.Screen 
         name="WebPage" 
         component={WebPageScreen}
@@ -104,5 +104,4 @@ function App() {
   </UserProvider>
   );
 }
-
 export default App;

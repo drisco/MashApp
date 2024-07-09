@@ -89,8 +89,6 @@ export default function AddTaskScreen() {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Task</Text>
-
       <Text style={styles.inputext}>Nom de la tache :</Text>
       <TextInput
         style={styles.input}
@@ -136,7 +134,7 @@ export default function AddTaskScreen() {
   />
 
       <TouchableOpacity onPress={handleSave} style={styles.btn}>
-        <Text style={styles.btnText}>Sauver la tache</Text>
+        <Text style={styles.btnText}>Enregistrer la tache</Text>
       </TouchableOpacity>
     </View>
   );
@@ -204,11 +202,13 @@ const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: '#007BFF',
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 30,
     alignItems:'center',
     borderRadius: 5,
     marginTop: 20,
+    marginStart:15,
+    marginEnd:15,
   },
   btnText: {
     color: '#FFFFFF',
